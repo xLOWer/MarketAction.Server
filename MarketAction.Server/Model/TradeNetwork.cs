@@ -18,11 +18,9 @@ namespace MarketAction.Server.Model
         public string Email { get; set; }
         
         [NotMapped]
-        public Stamp DateStamp { get; set; }
-        public Guid? DateStampId { get; set; }
-        
+        public ICollection<Catalogue> Catalogues { get; set; }
         [NotMapped]
-        public ObservableCollection<Market> Markets { get; set; }
+        public ICollection<Market> Markets { get; set; }
 
     }
 }

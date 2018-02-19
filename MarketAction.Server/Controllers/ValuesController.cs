@@ -20,11 +20,8 @@ namespace MarketAction.Server.Controllers
             JObject o = new JObject();   
             for (int i = 0; i <= 5; ++i)
             {
-                var stamp = new Stamp();
-
                 var user = new User()
                 {
-                    DateStampId = stamp.Id,
                     Login = "login" + i.ToString(),
                     Password = "password" + i.ToString()
                 };

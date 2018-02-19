@@ -17,8 +17,9 @@ namespace MarketAction.Server.Model
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
 
+        public Guid UserId { get; set; }
+
         [NotMapped]
         public User User { get; set; }
-        public Guid? UserId { get; set; }
     }
 }

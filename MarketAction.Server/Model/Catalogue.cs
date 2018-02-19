@@ -14,13 +14,12 @@ namespace MarketAction.Server.Model
         }
 
         public string Name { get; set; }
-
+        
+        public Guid? TradeNetworkId { get; set; }
+        
         [NotMapped]
-        public TradeNetwork TradeNetwork { get; set; }
-        public Guid? TradeNetworklId { get; set; }
-
+        public TradeNetwork TradeNetwork { get; set; }        
         [NotMapped]
-        public ObservableCollection<TradeNetwork> TradeNetworks { get; set; }
-
+        public ICollection<Good> Goods { get; set; }
     }
 }
