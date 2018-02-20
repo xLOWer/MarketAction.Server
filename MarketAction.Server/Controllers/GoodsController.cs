@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MarketAction.Server.Model;
 using MarketAction.Server.Models;
+using MarketAction.Server.Model;
 
 namespace MarketAction.Server.Controllers
 {

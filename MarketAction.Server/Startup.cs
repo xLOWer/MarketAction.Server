@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using MarketAction.Server.Models;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace MarketAction.Server
 {
@@ -32,8 +33,7 @@ namespace MarketAction.Server
             // Add framework services.
             services.AddMvc();
 
-            services.AddDbContext<MaDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("MaDbContext")));
+            services.AddDbContext<MaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MaDbContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +43,6 @@ namespace MarketAction.Server
             loggerFactory.AddDebug();
 
             app.UseMvc();
-        }
+        }        
     }
 }
