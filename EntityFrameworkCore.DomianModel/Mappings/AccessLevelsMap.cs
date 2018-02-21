@@ -1,8 +1,9 @@
 ﻿using MarketAction.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MarketAction.Server;
 
-namespace MarketAction.Server.Model.Mappings
+namespace MarketAction.Server.EntityFrameworkCore.DomianModel
 {
     public class AccessLevelsMap : DbEntityConfiguration<AccessLevel>
     {

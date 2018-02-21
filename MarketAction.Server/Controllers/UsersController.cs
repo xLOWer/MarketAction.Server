@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MarketAction.Server.Model;
-using MarketAction.Server.Models;
+using MarketAction.Server.EntityFrameworkCore.DomianModel;
 
 namespace MarketAction.Server.Controllers
 {

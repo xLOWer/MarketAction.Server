@@ -1,4 +1,5 @@
 ﻿using MarketAction.Server.Data;
+using MarketAction.Server.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

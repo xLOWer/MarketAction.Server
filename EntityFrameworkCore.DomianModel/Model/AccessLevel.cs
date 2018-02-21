@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using MarketAction.Server.Model;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MarketAction.Server.Model
+namespace MarketAction.Server
 {
     public class AccessLevel : BaseEntity
     {
