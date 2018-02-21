@@ -8,7 +8,7 @@ using MarketAction.Server.EntityFrameworkCore.DomianModel;
 using MarketAction.Server.Model;
 
 namespace MarketAction.Server.Controllers
-{
+{//insert into Goods (Id,Cost,Description,Name,Weight,CreateDate,LastEditDate,IsRemoved) values (NEWID(),200,'some description2','SOME NAME2',2668,GETDATE(),GETDATE(),0);
     [Produces("application/json")]
     [Route("api/Goods")]
     public class GoodsController : Controller
