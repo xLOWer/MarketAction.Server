@@ -11,26 +11,28 @@ namespace MarketAction.Server.Controllers
 {//insert into Goods (Id,Cost,Description,Name,Weight,CreateDate,LastEditDate,IsRemoved) values (NEWID(),200,'some description2','SOME NAME2',2668,GETDATE(),GETDATE(),0);
     [Produces("application/json")]
     [Route("api/Goods")]
-    public class GoodsController : Controller
+    public class GoodsService : DomainController
     {
-        private readonly MaDbContext _context;
-
-        public GoodsController(MaDbContext context)
-        {
-            _context = context;
-        }
-
-        // GET: api/Goods
+        private Guid techGuid = Guid.Parse("ffff0000-0000-0000-0000-0000ffff0000");
+        public GoodsService(MaDbContext context) : base(context)
+        {}
+        
         [HttpGet]
-        public IEnumerable<Good> GetGoods()
-        {
-            return _context.Goods;
-        }
-
-        // GET: api/Goods/5
+        public IEnumerable<Good> Get() => _context.Goods;
+        
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetGood([FromRoute] Guid id)
+        public async Task<IActionResult> Get([FromRoute] Guid id)
         {
+            if(id == techGuid)
+            {
+                _context.Goods.Add(new Good() {
+                    Id = Guid.NewGuid(),
+                    Cost = new Random(24363).Next(1,9999),
+                    Name ="somename"+ new Random(24363).Next(1, 9999).ToString() + new Random(24363).Next(1, 9999).ToString() + new Random(24363).Next(1, 9999).ToString(),
+                    Weight = new Random(24363).Next(1, 9999)
+                });
+                await _context.SaveChangesAsync();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -46,9 +48,9 @@ namespace MarketAction.Server.Controllers
             return Ok(good);
         }
 
-        // PUT: api/Goods/5
+        // PUT: api/Goods/guid
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGood([FromRoute] Guid id, [FromBody] Good good)
+        public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] Good good)
         {
             if (!ModelState.IsValid)
             {
@@ -68,7 +70,7 @@ namespace MarketAction.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!GoodExists(id))
+                if (!IsExists(id))
                 {
                     return NotFound();
                 }
@@ -83,7 +85,7 @@ namespace MarketAction.Server.Controllers
 
         // POST: api/Goods
         [HttpPost]
-        public async Task<IActionResult> PostGood([FromBody] Good good)
+        public async Task<IActionResult> Post([FromBody] Good good)
         {
             if (!ModelState.IsValid)
             {
@@ -96,9 +98,9 @@ namespace MarketAction.Server.Controllers
             return CreatedAtAction("GetGood", new { id = good.Id }, good);
         }
 
-        // DELETE: api/Goods/5
+        // DELETE: api/Goods/guid
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGood([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -117,7 +119,7 @@ namespace MarketAction.Server.Controllers
             return Ok(good);
         }
 
-        private bool GoodExists(Guid id)
+        public bool IsExists(Guid id)
         {
             return _context.Goods.Any(e => e.Id == id);
         }
