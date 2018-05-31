@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MarketAction.Server.Model
 {
-    public class Market : BaseEntity
+    public class Product : BaseEntity
     {
-        public Market()
+        public Product()
         {
             Id = Guid.NewGuid();
             IsRemoved = false;
@@ -15,12 +15,12 @@ namespace MarketAction.Server.Model
         }
 
         public string Name { get; set; }
-        public string Description { get; set; }
-        public string Email { get; set; }
-        public string Address { get; set; }
-             
+        public string Manufacturer { get; set; }
+        public string Weight { get; set; }
+        public string Cost { get; set; }
+
         [NotMapped]
-        public TradeNetwork TradeNetwork { get; set; }
-        public Guid? TradeNetworkId { get; set; }
+        public Action Action { get; set; }
+        public Guid? ActionId { get; set; }
     }
 }

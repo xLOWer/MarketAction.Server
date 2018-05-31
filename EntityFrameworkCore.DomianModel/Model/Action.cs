@@ -7,18 +7,23 @@ namespace MarketAction.Server.Model
     public class Action : BaseEntity
     {
         public Action()
-        {}
+        {
+            Id = Guid.NewGuid();
+            IsRemoved = false;
+            CreateDate = DateTime.Now;
+            LastEditDate = CreateDate;
+        }
 
         public string Name { get; set; }
         public string Description { get; set; }
-        public decimal? Weight { get; set; }
-        public decimal? Cost { get; set; }
-        public string SalePercent { get; set; }
-        public string NewCost { get; set; }
         public DateTime? DateActionStart { get; set; }
         public DateTime? DateActionEnd { get; set; }
-        
+
         [NotMapped]
-        public ICollection<Good> Goods { get; set; }
+        public TradeNetwork TradeNetwork { get; set; }
+        public Guid? TradeNetworkId { get; set; }
+
+        [NotMapped]
+        public ICollection<Product> Products { get; set; }
     }
 }

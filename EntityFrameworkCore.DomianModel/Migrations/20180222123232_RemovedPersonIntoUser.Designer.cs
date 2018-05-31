@@ -11,8 +11,8 @@ using System;
 namespace EntityFrameworkCore.DomianModel.Migrations
 {
     [DbContext(typeof(MaDbContext))]
-    [Migration("20180222042243_test1")]
-    partial class test1
+    [Migration("20180222123232_RemovedPersonIntoUser")]
+    partial class RemovedPersonIntoUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,15 +36,13 @@ namespace EntityFrameworkCore.DomianModel.Migrations
 
                     b.Property<bool>("ReadAccessLevels");
 
+                    b.Property<bool>("ReadActions");
+
                     b.Property<bool>("ReadAll");
 
                     b.Property<bool>("ReadCatalogues");
 
                     b.Property<bool>("ReadGoods");
-
-                    b.Property<bool>("ReadPersons");
-
-                    b.Property<bool>("ReadStamps");
 
                     b.Property<bool>("ReadTradeNetworks");
 
@@ -56,15 +54,13 @@ namespace EntityFrameworkCore.DomianModel.Migrations
 
                     b.Property<bool>("WriteAccessLevels");
 
+                    b.Property<bool>("WriteActions");
+
                     b.Property<bool>("WriteAll");
 
                     b.Property<bool>("WriteCatalogues");
 
                     b.Property<bool>("WriteGoods");
-
-                    b.Property<bool>("WritePersons");
-
-                    b.Property<bool>("WriteStamps");
 
                     b.Property<bool>("WriteTradeNetworks");
 
@@ -205,37 +201,6 @@ namespace EntityFrameworkCore.DomianModel.Migrations
                     b.ToTable("Markets");
                 });
 
-            modelBuilder.Entity("MarketAction.Server.Model.Person", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreateDate");
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<bool>("IsRemoved");
-
-                    b.Property<DateTime>("LastEditDate");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<DateTime?>("RemoveDate");
-
-                    b.Property<Guid>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Persons");
-                });
-
             modelBuilder.Entity("MarketAction.Server.Model.TradeNetwork", b =>
                 {
                     b.Property<Guid>("Id")
@@ -267,18 +232,23 @@ namespace EntityFrameworkCore.DomianModel.Migrations
 
                     b.Property<DateTime>("CreateDate");
 
+                    b.Property<string>("Email");
+
+                    b.Property<string>("FirstName");
+
                     b.Property<bool>("IsRemoved");
 
                     b.Property<DateTime>("LastEditDate");
 
                     b.Property<DateTime>("LastEntryDate");
 
+                    b.Property<string>("LastName");
+
                     b.Property<string>("Login");
 
                     b.Property<string>("Password");
 
-                    b.Property<Guid?>("PersonId")
-                        .IsRequired();
+                    b.Property<string>("PhoneNumber");
 
                     b.Property<DateTime?>("RemoveDate");
 
@@ -321,15 +291,6 @@ namespace EntityFrameworkCore.DomianModel.Migrations
                     b.HasOne("MarketAction.Server.Model.TradeNetwork", "TradeNetwork")
                         .WithMany("Markets")
                         .HasForeignKey("TradeNetworkId");
-                });
-
-            modelBuilder.Entity("MarketAction.Server.Model.Person", b =>
-                {
-                    b.HasOne("MarketAction.Server.Model.User", "User")
-                        .WithOne("Person")
-                        .HasForeignKey("MarketAction.Server.Model.Person", "UserId")
-                        .HasPrincipalKey("MarketAction.Server.Model.User", "PersonId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

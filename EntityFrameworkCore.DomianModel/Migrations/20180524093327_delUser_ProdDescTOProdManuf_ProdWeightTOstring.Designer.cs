@@ -11,9 +11,10 @@ using System;
 namespace EntityFrameworkCore.DomianModel.Migrations
 {
     [DbContext(typeof(MaDbContext))]
-    partial class MaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180524093327_delUser_ProdDescTOProdManuf_ProdWeightTOstring")]
+    partial class delUser_ProdDescTOProdManuf_ProdWeightTOstring
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

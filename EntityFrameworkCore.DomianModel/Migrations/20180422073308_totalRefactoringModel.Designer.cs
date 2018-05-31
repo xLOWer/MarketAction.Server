@@ -11,9 +11,10 @@ using System;
 namespace EntityFrameworkCore.DomianModel.Migrations
 {
     [DbContext(typeof(MaDbContext))]
-    partial class MaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180422073308_totalRefactoringModel")]
+    partial class totalRefactoringModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,27 +88,27 @@ namespace EntityFrameworkCore.DomianModel.Migrations
 
                     b.Property<Guid?>("ActionId");
 
-                    b.Property<string>("Cost");
+                    b.Property<decimal>("Cost");
 
                     b.Property<DateTime>("CreateDate");
+
+                    b.Property<string>("Description");
 
                     b.Property<bool>("IsRemoved");
 
                     b.Property<DateTime>("LastEditDate");
 
-                    b.Property<string>("Manufacturer");
-
                     b.Property<string>("Name");
 
                     b.Property<DateTime?>("RemoveDate");
 
-                    b.Property<string>("Weight");
+                    b.Property<decimal?>("Weight");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ActionId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Goods");
                 });
 
             modelBuilder.Entity("MarketAction.Server.Model.TradeNetwork", b =>
@@ -132,6 +133,66 @@ namespace EntityFrameworkCore.DomianModel.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TradeNetworks");
+                });
+
+            modelBuilder.Entity("MarketAction.Server.Model.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreateDate");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<bool>("IsRemoved");
+
+                    b.Property<DateTime>("LastEditDate");
+
+                    b.Property<DateTime>("LastEntryDate");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<string>("Login");
+
+                    b.Property<string>("Password");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("ReadAccessLevels");
+
+                    b.Property<bool>("ReadActions");
+
+                    b.Property<bool>("ReadAll");
+
+                    b.Property<bool>("ReadCatalogues");
+
+                    b.Property<bool>("ReadProducts");
+
+                    b.Property<bool>("ReadTradeNetworks");
+
+                    b.Property<bool>("ReadUsers");
+
+                    b.Property<DateTime?>("RemoveDate");
+
+                    b.Property<bool>("WriteAccessLevels");
+
+                    b.Property<bool>("WriteActions");
+
+                    b.Property<bool>("WriteAll");
+
+                    b.Property<bool>("WriteCatalogues");
+
+                    b.Property<bool>("WriteProducts");
+
+                    b.Property<bool>("WriteTradeNetworks");
+
+                    b.Property<bool>("WriteUsers");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("MarketAction.Server.Model.Action", b =>

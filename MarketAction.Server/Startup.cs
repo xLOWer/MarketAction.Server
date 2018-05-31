@@ -36,7 +36,6 @@ namespace MarketAction.Server
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
             app.UseMvc();
         }        
     }

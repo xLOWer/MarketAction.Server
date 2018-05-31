@@ -5,64 +5,54 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MarketAction.Server.EntityFrameworkCore.DomianModel;
-using MarketAction.Server.Model;
 
 namespace MarketAction.Server.Controllers
-{//insert into Goods (Id,Cost,Description,Name,Weight,CreateDate,LastEditDate,IsRemoved) values (NEWID(),200,'some description2','SOME NAME2',2668,GETDATE(),GETDATE(),0);
+{
     [Produces("application/json")]
-    [Route("api/Goods")]
-    public class GoodsService : DomainController
+    [Route("api/Actions")]
+    public class ActionsService : DomainController
     {
-        private Guid techGuid = Guid.Parse("ffff0000-0000-0000-0000-0000ffff0000");
-        public GoodsService(MaDbContext context) : base(context)
+        public ActionsService(MaDbContext context) : base(context)
         {}
         
+        //GET
         [HttpGet]
-        public IEnumerable<Good> Get() => _context.Goods;
-        
+        public IEnumerable<Model.Action> Get() => _context.Actions;
+
+        //GET by id
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
-            if(id == techGuid)
-            {
-                _context.Goods.Add(new Good() {
-                    Id = Guid.NewGuid(),
-                    Cost = new Random(24363).Next(1,9999),
-                    Name ="somename"+ new Random(24363).Next(1, 9999).ToString() + new Random(24363).Next(1, 9999).ToString() + new Random(24363).Next(1, 9999).ToString(),
-                    Weight = new Random(24363).Next(1, 9999)
-                });
-                await _context.SaveChangesAsync();
-            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var good = await _context.Goods.SingleOrDefaultAsync(m => m.Id == id);
+            var action = await _context.Actions.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (good == null)
+            if (action == null)
             {
                 return NotFound();
             }
 
-            return Ok(good);
+            return Ok(action);
         }
 
-        // PUT: api/Goods/guid
+        // PUT: UPDATE
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] Good good)
+        public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] Model.Action action)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != good.Id)
+            if (id != action.Id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(good).State = EntityState.Modified;
+            
+            _context.Entry(action).State = EntityState.Modified;
 
             try
             {
@@ -83,22 +73,22 @@ namespace MarketAction.Server.Controllers
             return NoContent();
         }
 
-        // POST: api/Goods
+        // POST: INSERT
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Good good)
+        public async Task<IActionResult> Post([FromBody] Model.Action action)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            _context.Goods.Add(good);
+            
+            _context.Actions.Add(action);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGood", new { id = good.Id }, good);
+            return CreatedAtAction("GetAction", new { id = action.Id }, action);
         }
 
-        // DELETE: api/Goods/guid
+        // DELETE DELETE
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
@@ -107,21 +97,21 @@ namespace MarketAction.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var good = await _context.Goods.SingleOrDefaultAsync(m => m.Id == id);
-            if (good == null)
+            var action = await _context.Actions.SingleOrDefaultAsync(m => m.Id == id);
+            if (action == null)
             {
                 return NotFound();
             }
 
-            _context.Goods.Remove(good);
+            _context.Actions.Remove(action);
             await _context.SaveChangesAsync();
 
-            return Ok(good);
+            return Ok(action);
         }
 
         public bool IsExists(Guid id)
         {
-            return _context.Goods.Any(e => e.Id == id);
+            return _context.Actions.Any(e => e.Id == id);
         }
     }
 }

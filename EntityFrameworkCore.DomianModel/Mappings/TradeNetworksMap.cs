@@ -8,8 +8,9 @@ namespace MarketAction.Server.Model.Mappings
     {
         public override void Configure(EntityTypeBuilder<TradeNetwork> entity)
         {
-            //entity.HasOne(x => x.Document).WithMany(w => w.Attaches).IsRequired().OnDelete(DeleteBehavior.Restrict);
             entity.HasKey(x => x.Id);
+            entity.HasMany(x => x.Actions).WithOne(x => x.TradeNetwork);
+            entity.HasMany(x => x.Markets).WithOne(x => x.TradeNetwork);
             entity.ToTable("TradeNetworks");
         }
     }
