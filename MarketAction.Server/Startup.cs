@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using EntityFrameworkCore.DomianModel;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using MarketAction.Server.EntityFrameworkCore.DomianModel;
 
 namespace MarketAction.Server
 {
@@ -27,7 +27,8 @@ namespace MarketAction.Server
         {
             // Add framework services.
             services.AddMvc();
-
+            services.AddMvc().AddJsonOptions(x =>
+                x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<MaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MaDbContext")));
         }
 

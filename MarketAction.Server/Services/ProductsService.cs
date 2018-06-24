@@ -2,102 +2,133 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EntityFrameworkCore.DomianModel;
+using EntityFrameworkCore.DomianModel.Model;
+using MarketAction.Server.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MarketAction.Server.EntityFrameworkCore.DomianModel;
-using MarketAction.Server.Model;
 using Newtonsoft.Json;
+using Action = EntityFrameworkCore.DomianModel.Model.Action;
 
-namespace MarketAction.Server.Controllers
+namespace MarketAction.Server.Services
 {
     [Produces("application/json")]
-    [Route("api/Products")]
-    public class ProductsService : DomainController
+    [Route("api/products")]
+    public class ProductsService : DomainController<Product>
     {
         public ProductsService(MaDbContext context) : base(context)
-        { }
+        {
+            Products = context?
+                .Products?
+                .Include(x => x.Action)?
+                .ThenInclude(x => x.TradeNetwork)?
+                .Where(x => !x.IsRemoved)?
+                .ToList();
+        }
 
-        //GET
         [HttpGet]
-        public IEnumerable<Product> Get() => _context.Products;
+        public IEnumerable<Product> GetAll() => Products.OrderBy(x=>x.Name).ToList();
 
-        //GET
-        [HttpGet("Find")]
-        public IEnumerable<Product> GetFiltered(string filter)
+        [HttpGet("sort/{sort}")]
+        public IEnumerable<Product> GetAllSorted([FromRoute] string sort)
         {
-            if (filter == null) return Get();
-            List<string> m = JsonConvert.DeserializeObject<List<string>>(filter);
-            return Get()
-                .Where(prod =>
-                    prod.Manufacturer.Any(x => m)) ||
-                    prod.Name.Any(x => m.Contains(x.ToString())) ||
-                    prod.Weight.Any(x => m.Contains(x.ToString())) ||
-                    prod.Cost.Any(x => m.Contains(x.ToString())
-                )
-            );
+            switch (sort)
+            {
+                case "n": return Products.OrderBy(x => x.Name).ToList(); break;
+                case "N": return Products.OrderBy(x => x.Name).Reverse().ToList(); break;
+
+                case "c": return Products.OrderBy(x => x.Cost).ToList(); break;
+                case "C": return Products.OrderBy(x => x.Cost).Reverse().ToList(); break;
+
+                case "w": return Products.OrderBy(x => x.Weight).ToList(); break;
+                case "W": return Products.OrderBy(x => x.Weight).Reverse().ToList(); break;
+
+                case "m": return Products.OrderBy(x => x.Manufacturer).ToList(); break;
+                case "M": return Products.OrderBy(x => x.Manufacturer).Reverse().ToList(); break;
+
+                default : return Products.OrderBy(x => x.Name).ToList();
+            }
         }
 
-        [HttpPost("Find")]
-        public IEnumerable<Product> Find([FromBody] string filter)
+        [HttpGet("findbyaction/{id}")]
+        public IEnumerable<Product> GetByActionId([FromRoute] Guid? id)
+            => id == null || id == Guid.Empty
+                ? GetAll()
+                : Products?.Where(x => x.ActionId == id);
+
+        [HttpGet("findbytradenetwork/{id}")]
+        public IEnumerable<Product> GetByTradeNetworktId([FromRoute] Guid? id)
+            => id == null || id == Guid.Empty
+                ? GetAll()
+                : Products.Where(x => x.Action.TradeNetworkId == id);
+        
+        [HttpPost("findbycriteria")]
+        public IEnumerable<Product> Find([FromBody] string filter) =>
+            String.IsNullOrEmpty(filter)
+                ? GetAll()
+                : GetByCriteria(JsonConvert.DeserializeObject<List<string>>(filter));
+        
+        public IEnumerable<Product> GetByCriteria(List<string> criterias)
         {
-            if (String.IsNullOrEmpty(filter)) return Get();
-            return GetFiltered(filter);
+            var res = Products;
+            var get = res;
+            foreach (var s in criterias)
+            {
+                var buffer = get?.Where(x => x.Name.ToLower().Contains(s.ToLower())
+                                             || x.Manufacturer.ToLower().Contains(s.ToLower())
+                                             || x.Cost.ToLower().Contains(s.ToLower())
+                                             || x.Weight.ToLower().Contains(s.ToLower()));
+                //if (buffer?.Count() > 0)
+                res = res?.Intersect(buffer);
+            }
+
+            return res ?? GetAll();
         }
 
-        //GET by id
+        /*
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid? id)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            var product = await _context.Products.SingleOrDefaultAsync(m => m.Id == id);
+            var product = await Context?.Products?
+                .Include(x => x.Action)?
+                .Where(x => !x.IsRemoved)?
+                .SingleOrDefaultAsync(m => m.Id == id);
 
             if (product == null)
-            {
                 return NotFound();
-            }
 
             return Ok(product);
         }
-
+         
         // PUT: UPDATE
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] Product product)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             if (id != product.Id)
-            {
                 return BadRequest();
-            }
 
-            _context.Entry(product).State = EntityState.Modified;
+            Context.Entry(product).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!IsExists(id))
-                {
                     return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                else throw;
             }
 
             return NoContent();
         }
-
+        
         // POST: INSERT
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Product product)
@@ -107,12 +138,12 @@ namespace MarketAction.Server.Controllers
                 return BadRequest(ModelState);
             }
             
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            Context.Products.Add(product);
+            await Context.SaveChangesAsync();
 
             return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
-
+        
         // DELETE DELETE
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
@@ -122,21 +153,22 @@ namespace MarketAction.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var product = await _context.Products.SingleOrDefaultAsync(m => m.Id == id);
+            var product = await Context.Products.SingleOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            Context.Products.Remove(product);
+            await Context.SaveChangesAsync();
 
             return Ok(product);
         }
-
+        
         public bool IsExists(Guid id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return Context.Products.Any(e => e.Id == id);
         }
+        */
     }
 }

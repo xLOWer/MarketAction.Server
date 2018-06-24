@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace MarketAction.Server.Data
+namespace EntityFrameworkCore.DomianModel
 {
     internal static class ModelBuilderExtensions
     {

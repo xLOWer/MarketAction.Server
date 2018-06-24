@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MarketAction.Server.Model
+namespace EntityFrameworkCore.DomianModel.Model
 {
     public abstract class BaseEntity
     {

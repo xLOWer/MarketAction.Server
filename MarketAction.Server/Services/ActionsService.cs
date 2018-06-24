@@ -2,116 +2,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EntityFrameworkCore.DomianModel;
+using MarketAction.Server.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MarketAction.Server.EntityFrameworkCore.DomianModel;
+using Action = EntityFrameworkCore.DomianModel.Model.Action;
 
-namespace MarketAction.Server.Controllers
+namespace MarketAction.Server.Services
 {
     [Produces("application/json")]
-    [Route("api/Actions")]
-    public class ActionsService : DomainController
+    [Route("api/actions")]
+    public class ActionsService : DomainController<Action>
     {
         public ActionsService(MaDbContext context) : base(context)
-        {}
-        
-        //GET
+        {
+            Actions = context?
+                .Actions?
+                .Include(x=>x.TradeNetwork)?
+                .Where(x => !x.IsRemoved)?
+                .ToList();
+        }
+
         [HttpGet]
-        public IEnumerable<Model.Action> Get() => _context.Actions;
+        public IEnumerable<Action> GetAll() => Actions ?? new List<Action>();
 
-        //GET by id
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] Guid id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var action = await _context.Actions.SingleOrDefaultAsync(m => m.Id == id);
-
-            if (action == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(action);
-        }
-
-        // PUT: UPDATE
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] Model.Action action)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != action.Id)
-            {
-                return BadRequest();
-            }
-            
-            _context.Entry(action).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!IsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: INSERT
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Model.Action action)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            
-            _context.Actions.Add(action);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAction", new { id = action.Id }, action);
-        }
-
-        // DELETE DELETE
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var action = await _context.Actions.SingleOrDefaultAsync(m => m.Id == id);
-            if (action == null)
-            {
-                return NotFound();
-            }
-
-            _context.Actions.Remove(action);
-            await _context.SaveChangesAsync();
-
-            return Ok(action);
-        }
-
-        public bool IsExists(Guid id)
-        {
-            return _context.Actions.Any(e => e.Id == id);
-        }
+        [HttpGet("findbytradenetwork/{id}")]
+        public IEnumerable<Action> GetByTradeNetworktId([FromRoute] Guid? id)
+            => id == null || id == Guid.Empty
+                ? GetAll()
+                : Actions.Where(x => x.TradeNetworkId == id);
     }
 }

@@ -1,8 +1,8 @@
-﻿using MarketAction.Server.Data;
+﻿using EntityFrameworkCore.DomianModel.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace MarketAction.Server.Model.Mappings
+namespace EntityFrameworkCore.DomianModel.Mappings
 {
     public class ProductsMap : DbEntityConfiguration<Product>
     {

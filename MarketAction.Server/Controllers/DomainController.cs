@@ -1,18 +1,27 @@
+using System.Collections.Generic;
+using EntityFrameworkCore.DomianModel;
+using EntityFrameworkCore.DomianModel.Model;
 using Microsoft.AspNetCore.Mvc;
-using MarketAction.Server.EntityFrameworkCore.DomianModel;
+using Microsoft.EntityFrameworkCore;
 
 //insert into Goods (Id,Cost,Description,Name,Weight,CreateDate,LastEditDate,IsRemoved) values (NEWID(),200,'some description2','SOME NAME2',2668,GETDATE(),GETDATE(),0);
 
 namespace MarketAction.Server.Controllers
 {
-    public class DomainController : Controller
+    [Produces("application/json")]
+    [Route("api")]
+    public class DomainController<T> : Controller
     {
-        public readonly MaDbContext _context;
+        public readonly MaDbContext Context;
+
+        public IEnumerable<T> Actions { get; set; }
+        public IEnumerable<T> Markets { get; set; }
+        public IEnumerable<T> Products { get; set; }
+        public IEnumerable<T> TradeNetworks { get; set; }
 
         public DomainController(MaDbContext context)
         {
-            _context = context;
+            Context = context;
         }
-
     }
 }

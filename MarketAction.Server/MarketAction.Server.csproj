@@ -3,11 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PackageTargetFallback>portable-net45+win8</PackageTargetFallback>
+    <AssemblyVersion>1.0.0.182</AssemblyVersion>
+    <FileVersion>1.0.0.182</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
-    <Folder Include="ServiceModel\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.0" />

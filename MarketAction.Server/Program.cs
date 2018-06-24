@@ -7,7 +7,7 @@ namespace MarketAction.Server
     public class Program
     {
         public static void Main(string[] args)
-        {//Port=1433;
+        {
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
