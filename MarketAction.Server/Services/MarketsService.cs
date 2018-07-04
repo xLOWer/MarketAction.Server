@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using EntityFrameworkCore.DomianModel;
 using EntityFrameworkCore.DomianModel.Model;
 using MarketAction.Server.Controllers;
@@ -20,6 +19,7 @@ namespace MarketAction.Server.Services
                 .Markets?
                 .Include(x => x.TradeNetwork)?
                 .Where(x => !x.IsRemoved)?
+                .OrderBy(x => x.Name)
                 .ToList();
         }
 

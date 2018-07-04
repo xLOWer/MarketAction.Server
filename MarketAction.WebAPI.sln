@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketAction.Server", "Mark
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFrameworkCore.DomianModel", "EntityFrameworkCore.DomianModel\EntityFrameworkCore.DomianModel.csproj", "{7DDCE15A-88BD-424A-A739-7570ABF3D143}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MarketAction.Database", "MarketAction.Database\MarketAction.Database.sqlproj", "{982D8DD2-FD75-4BCD-9320-86E757BCE1B6}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{32CB99CE-AAFC-4F08-9508-8C8D673463E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,12 +23,10 @@ Global
 		{7DDCE15A-88BD-424A-A739-7570ABF3D143}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DDCE15A-88BD-424A-A739-7570ABF3D143}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DDCE15A-88BD-424A-A739-7570ABF3D143}.Release|Any CPU.Build.0 = Release|Any CPU
-		{982D8DD2-FD75-4BCD-9320-86E757BCE1B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{982D8DD2-FD75-4BCD-9320-86E757BCE1B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{982D8DD2-FD75-4BCD-9320-86E757BCE1B6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{982D8DD2-FD75-4BCD-9320-86E757BCE1B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{982D8DD2-FD75-4BCD-9320-86E757BCE1B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{982D8DD2-FD75-4BCD-9320-86E757BCE1B6}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{32CB99CE-AAFC-4F08-9508-8C8D673463E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32CB99CE-AAFC-4F08-9508-8C8D673463E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32CB99CE-AAFC-4F08-9508-8C8D673463E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32CB99CE-AAFC-4F08-9508-8C8D673463E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

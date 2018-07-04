@@ -23,7 +23,7 @@ namespace EntityFrameworkCore.DomianModel.Model
         public DateTime? DateActionStart { get; set; }
         public DateTime? DateActionEnd { get; set; }
         public Guid? TradeNetworkId { get; set; }
-
+        
         [NotMapped] public virtual string TradeNetworkName => TradeNetwork?.Name ?? "undefined";
         [NotMapped] public virtual TradeNetwork TradeNetwork { get; set; }
         [NotMapped] public virtual ICollection<Product> Products { get; set; }

@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using EntityFrameworkCore.DomianModel;
 using EntityFrameworkCore.DomianModel.Model;
 using MarketAction.Server.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Action = EntityFrameworkCore.DomianModel.Model.Action;
 
 namespace MarketAction.Server.Services
 {
@@ -23,28 +21,29 @@ namespace MarketAction.Server.Services
                 .Include(x => x.Action)?
                 .ThenInclude(x => x.TradeNetwork)?
                 .Where(x => !x.IsRemoved)?
+                .OrderBy(x => x.Name)
                 .ToList();
         }
 
         [HttpGet]
-        public IEnumerable<Product> GetAll() => Products.OrderBy(x=>x.Name).ToList();
+        public IEnumerable<Product> GetAll() => Products ?? new List<Product>();
 
         [HttpGet("sort/{sort}")]
         public IEnumerable<Product> GetAllSorted([FromRoute] string sort)
         {
             switch (sort)
             {
-                case "n": return Products.OrderBy(x => x.Name).ToList(); break;
-                case "N": return Products.OrderBy(x => x.Name).Reverse().ToList(); break;
+                case "n": return Products.OrderBy(x => x.Name).ToList(); 
+                case "N": return Products.OrderBy(x => x.Name).Reverse().ToList();
 
-                case "c": return Products.OrderBy(x => x.Cost).ToList(); break;
-                case "C": return Products.OrderBy(x => x.Cost).Reverse().ToList(); break;
+                case "c": return Products.OrderBy(x => x.Cost).ToList(); 
+                case "C": return Products.OrderBy(x => x.Cost).Reverse().ToList();
 
-                case "w": return Products.OrderBy(x => x.Weight).ToList(); break;
-                case "W": return Products.OrderBy(x => x.Weight).Reverse().ToList(); break;
+                case "w": return Products.OrderBy(x => x.Weight).ToList(); 
+                case "W": return Products.OrderBy(x => x.Weight).Reverse().ToList();
 
-                case "m": return Products.OrderBy(x => x.Manufacturer).ToList(); break;
-                case "M": return Products.OrderBy(x => x.Manufacturer).Reverse().ToList(); break;
+                case "m": return Products.OrderBy(x => x.Manufacturer).ToList();
+                case "M": return Products.OrderBy(x => x.Manufacturer).Reverse().ToList(); 
 
                 default : return Products.OrderBy(x => x.Name).ToList();
             }
@@ -78,7 +77,6 @@ namespace MarketAction.Server.Services
                                              || x.Manufacturer.ToLower().Contains(s.ToLower())
                                              || x.Cost.ToLower().Contains(s.ToLower())
                                              || x.Weight.ToLower().Contains(s.ToLower()));
-                //if (buffer?.Count() > 0)
                 res = res?.Intersect(buffer);
             }
 

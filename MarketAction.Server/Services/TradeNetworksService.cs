@@ -1,13 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using EntityFrameworkCore.DomianModel;
 using EntityFrameworkCore.DomianModel.Model;
 using MarketAction.Server.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace MarketAction.Server.Services
 {
@@ -20,6 +16,7 @@ namespace MarketAction.Server.Services
             TradeNetworks = context?
                 .TradeNetworks?
                 .Where(x => !x.IsRemoved)?
+                .OrderBy(x => x.Name)
                 .ToList();
         }
 

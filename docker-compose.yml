@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  marketaction.server:
+    image: marketactionserver
+    build:
+      context: .
+      dockerfile: MarketAction.Server/Dockerfile
